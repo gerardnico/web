@@ -1,0 +1,35 @@
+<html>
+<head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+</head>
+<body>
+
+<h1>Cookie Example</h1>
+
+<br>
+<br>
+
+You have been here <span id="totalTimes">0</span> time(s)!
+
+<br>
+<br>
+
+<a href="/">refresh</a>
+
+<p>Form</p>
+<form>
+    <input type="submit" name="action" value="Set Cookie To Bar" />
+    <input type="submit" name="action" value="Set Cookie To Foo" />
+    <input type="submit" name="action" value="Set Cookie To Top" />
+</form>
+
+<script language="JavaScript">
+    $(document).ready(function () {
+        $('#totalTimes').html($.cookie('visits'));
+    });
+</script>
+
+
+</body>
+</html>
