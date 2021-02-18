@@ -2,6 +2,8 @@
 
 
 
+
+
 In the host file
 ```txt
 127.0.0.1 foo.example.com

@@ -4,9 +4,11 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.Cookie;
 import io.vertx.core.http.HttpMethod;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.StaticHandler;
+import io.vertx.ext.web.templ.thymeleaf.ThymeleafTemplateEngine;
 
 import java.util.Locale;
 
@@ -30,43 +32,46 @@ public class Server extends AbstractVerticle {
 
         Router router = Router.router(vertx);
 
+        // In order to use a Thymeleaf template we first need to create an engine
+        final ThymeleafTemplateEngine engine = ThymeleafTemplateEngine.create(vertx);
 
         // Enable multipart form data parsing
         router.route().handler(BodyHandler.create());
 
         // on every path
-        router.route().handler(ctx -> {
+        router.route("/cookie").handler(ctx -> {
+
 
             // domain name host information
             String host = ctx.request().getHeader("host");
             String originFromLabel = host.substring(0, host.indexOf("."));
-            if (originFromLabel.equals("example")){
+            if (originFromLabel.equals("example")) {
                 originFromLabel = "top";
             }
 
-            /**
-             * Trying to send a cookie from a domain to another
-             */
 
+            /*
+              Trying to send a cookie from a domain to another
+             */
             String action = ctx.request().getParam("action");
-            if (action!=null) {
-                String lastPart = action.substring(action.lastIndexOf(" ")+1).toLowerCase(Locale.ROOT);
+            if (action != null) {
+                String lastPart = action.substring(action.lastIndexOf(" ") + 1).toLowerCase(Locale.ROOT);
                 String cookieName = originFromLabel + "2" + lastPart;
                 switch (lastPart) {
                     case "foo":
                         ctx.addCookie(Cookie.cookie(cookieName, cookieName).setDomain(FOO_DOMAIN));
-                        System.out.println("The cookie "+cookieName+" was set for the domain "+FOO_DOMAIN);
+                        System.out.println("The cookie " + cookieName + " was set for the domain " + FOO_DOMAIN);
                         break;
                     case "bar":
                         ctx.addCookie(Cookie.cookie(cookieName, cookieName).setDomain(BAR_DOMAIN));
-                        System.out.println("The cookie "+cookieName+" was set for the domain "+BAR_DOMAIN);
+                        System.out.println("The cookie " + cookieName + " was set for the domain " + BAR_DOMAIN);
                         break;
                     case "top":
                         ctx.addCookie(Cookie.cookie(cookieName, cookieName).setDomain(TOP_DOMAIN));
-                        System.out.println("The cookie "+cookieName+" was set for the domain "+TOP_DOMAIN);
+                        System.out.println("The cookie " + cookieName + " was set for the domain " + TOP_DOMAIN);
                         break;
                     default:
-                        ctx.response().setStatusCode(500).setStatusMessage("The action "+lastPart+" is unknown");
+                        ctx.response().setStatusCode(500).setStatusMessage("The action " + lastPart + " is unknown");
                 }
             }
 
@@ -101,7 +106,19 @@ public class Server extends AbstractVerticle {
                     Cookie.cookie(visitCookieName, "" + visits)
             );
 
-            ctx.next();
+
+            /*
+             * Template
+             */
+            JsonObject data = new JsonObject()
+                    .put("host", host);
+            engine.render(data, "templates/cookie.html", res -> {
+                if (res.succeeded()) {
+                    ctx.response().end(res.result());
+                } else {
+                    ctx.fail(res.cause());
+                }
+            });
         });
 
         // Serve the static resources

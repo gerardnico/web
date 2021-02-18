@@ -1,35 +1,23 @@
 <html>
 <head>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
 </head>
 <body>
+<div class="container" style="max-width:720px">
 
-<h1>Cookie Example</h1>
-
-<br>
-<br>
-
-You have been here <span id="totalTimes">0</span> time(s)!
-
-<br>
-<br>
-
-<a href="/">refresh</a>
-
-<p>Form</p>
-<form>
-    <input type="submit" name="action" value="Set Cookie To Bar" />
-    <input type="submit" name="action" value="Set Cookie To Foo" />
-    <input type="submit" name="action" value="Set Cookie To Top" />
-</form>
-
-<script language="JavaScript">
-    $(document).ready(function () {
-        $('#totalTimes').html($.cookie('visits'));
-    });
-</script>
-
-
+    <h1>Web Security</h1>
+    <p>This website is all about web security around browser storage such as:</p>
+    <ul>
+        <li><a href="/cookie">Cookie</a></li>
+        <li><a href="/local">Local Storage</a></li>
+    </ul>
+</div>
 </body>
 </html>

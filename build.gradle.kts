@@ -27,6 +27,8 @@ dependencies {
     implementation("io.vertx:vertx-core:$projectVertxVersion")
     implementation("io.vertx:vertx-web:$projectVertxVersion")
     implementation("io.vertx:vertx-web-client:$projectVertxVersion")
+    implementation("io.vertx:vertx-web-templ-thymeleaf:$projectVertxVersion")
+    implementation("org.slf4j:slf4j-jdk14:1.7.21")
 }
 
 vertx {
