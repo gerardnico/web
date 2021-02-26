@@ -1,11 +1,11 @@
-package com.gerardnico.web;
+package com.gerardnico.web.handler;
 
 
+import com.gerardnico.web.ContextWrapper;
+import com.gerardnico.web.Template;
 import io.vertx.core.Handler;
 import io.vertx.core.http.Cookie;
 import io.vertx.ext.web.RoutingContext;
-
-import java.util.Locale;
 
 /**
  * An handler that puts a cookie for all visits

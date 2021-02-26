@@ -1,17 +1,13 @@
 package com.gerardnico.web;
 
+import com.gerardnico.web.handler.CookiePage;
+import com.gerardnico.web.handler.CookieVisitsDomain;
+import com.gerardnico.web.handler.Log;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
-import io.vertx.core.http.Cookie;
-import io.vertx.core.json.JsonObject;
-import io.vertx.core.shareddata.LocalMap;
-import io.vertx.core.shareddata.SharedData;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.StaticHandler;
-import io.vertx.ext.web.templ.thymeleaf.ThymeleafTemplateEngine;
-
-import java.util.Locale;
 
 
 public class Server extends AbstractVerticle {
@@ -35,6 +31,9 @@ public class Server extends AbstractVerticle {
         Router router = Router.router(vertx);
 
         Template template = Template.create(vertx);
+
+        // Log to the console
+        router.route().handler(Log.create());
 
         // Enable multipart form data parsing
         router.route().handler(BodyHandler.create());

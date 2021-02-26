@@ -1,4 +1,4 @@
-package com.gerardnico.web;
+package com.gerardnico.web.handler;
 
 
 import io.vertx.core.Handler;
