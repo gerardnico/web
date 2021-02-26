@@ -12,8 +12,8 @@ public class Template {
 
     private final ThymeleafTemplateEngine engine;
 
-    public void render(JsonObject data, String page, RoutingContext ctx) {
-        engine.render(data, "templates/" + page + ".html", res -> {
+    public void render(JsonObject data, RoutingContext ctx) {
+        engine.render(data, "templates/page.html", res -> {
             if (res.succeeded()) {
                 ctx.response().end(res.result());
             } else {
@@ -25,8 +25,15 @@ public class Template {
     public void render(String page, RoutingContext ctx) {
         JsonObject data = new JsonObject()
                 .put("host", ContextWrapper.getHost(ctx))
-                .put("shortHost", ContextWrapper.getShortHost(ctx));
-        render(data, page, ctx);
+                .put("shortHost", ContextWrapper.getShortHost(ctx))
+                .put("title",page+" (on "+ContextWrapper.getShortHost(ctx)+")")
+                .put("subtitle","From "+ContextWrapper.getHost(ctx))
+                .put("page",page)
+                .put("cross_ref_1","http://foo.example.com:8080/"+page)
+                .put("cross_ref_2","http://bar.example.com:8080/"+page)
+                .put("cross_ref_3","http://example.com:8080/"+page)
+                ;
+        render(data, ctx);
     }
 
     public Template(Vertx vertx) {
