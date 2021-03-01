@@ -5,20 +5,26 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link href="/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <script src="/js/jquery.min.js"></script>
-    <script src="/js/jquery.cookie.js"></script>
     <!-- Required Bootstrap meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 
-<div class="container" style="max-width:720px">
-    <header>
-        <h1 data-th-text="${title}">Title</h1>
-        <p data-th-text="${subtitle}">From</p>
-    </header>
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+            <header>
+                <h1 data-th-text="${title}">Title</h1>
+                <p data-th-text="${subtitle}">From</p>
+            </header>
 
-    <div data-th-replace="('templates/pages/' + ${page} + '.html') :: ('#'+${page})">Page Insert</div>
+            <div data-th-replace="('templates/pages/' + ${page} + '.html') :: ('#'+${page})">Page Insert</div>
+        </div>
+        <div class="col-4">
+            <div data-th-replace="('templates/fragments/http_headers.html')">Http Headers</div>
+        </div>
+    </div>
 
 
 </div>

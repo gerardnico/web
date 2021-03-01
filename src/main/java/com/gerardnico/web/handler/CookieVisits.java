@@ -1,23 +1,25 @@
 package com.gerardnico.web.handler;
 
 
+import com.gerardnico.web.Template;
 import io.vertx.core.Handler;
 import io.vertx.core.http.Cookie;
+import io.vertx.core.shareddata.LocalMap;
 import io.vertx.ext.web.RoutingContext;
 
 /**
- * An handler that puts a cookie for all visits
+ * An handler that puts a cookie visits for all visits
  */
-public class CookieVisitsDomain implements Handler<RoutingContext> {
+public class CookieVisits implements Handler<RoutingContext> {
     public static Handler<RoutingContext> create() {
-        return new CookieVisitsDomain();
+        return new CookieVisits();
     }
 
     @Override
     public void handle(RoutingContext ctx) {
 
 
-        String visitCookieName = "visitsDomain";
+        String visitCookieName = "visits";
         Cookie someCookie = ctx.getCookie(visitCookieName);
 
         long visits = 0;
@@ -34,9 +36,18 @@ public class CookieVisitsDomain implements Handler<RoutingContext> {
         visits++;
 
         // Add a cookie - this will get written back in the response automatically
-        ctx.addCookie(
-                Cookie.cookie(visitCookieName, "" + visits)
-        );
+        Cookie cookie = Cookie.cookie(visitCookieName, "" + visits);
+        if (ctx.request().path().equals("/cookie")) {
+            cookie.setPath(ctx.request().path());
+        } else {
+            /**
+             * Because Javascript cannot see this cookie
+             */
+            LocalMap<Object, Object> map = ctx.vertx().sharedData().getLocalMap(Template.SHARED_MAP_NAME);
+            map.put("visitsCookieDomainScoped",visits);
+        }
+        ctx.addCookie(cookie);
+
 
         ctx.next();
 

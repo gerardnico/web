@@ -1,6 +1,7 @@
 package com.gerardnico.web;
 
 import com.gerardnico.web.handler.CookiePage;
+import com.gerardnico.web.handler.CookieVisits;
 import com.gerardnico.web.handler.CookieVisitsDomain;
 import com.gerardnico.web.handler.Log;
 import io.vertx.core.AbstractVerticle;
@@ -38,10 +39,11 @@ public class Server extends AbstractVerticle {
         // Enable multipart form data parsing
         router.route().handler(BodyHandler.create());
 
-        // Add a counter on all pages
+        // Cookie
         router.route().handler(CookieVisitsDomain.create());
+        router.route().handler(CookieVisits.create());
 
-        // Cookie Page
+        // Page
         router.route("/cookie").handler(CookiePage.create(template));
 
         // Serve the index

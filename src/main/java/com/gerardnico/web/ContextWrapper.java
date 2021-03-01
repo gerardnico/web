@@ -26,4 +26,16 @@ public class ContextWrapper {
         }
         return shortHost;
     }
+
+    public static String getDomain(RoutingContext ctx) {
+        String domain =  getHost(ctx);
+        if (domain.contains(":")){
+            domain = domain.substring(0,domain.indexOf(":"));
+        }
+        return domain;
+    }
+
+    public static String getPath(RoutingContext ctx) {
+        return ctx.request().path();
+    }
 }

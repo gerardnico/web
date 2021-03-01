@@ -1,3 +1,21 @@
-<div>
+<section>
     <h2>Http Headers</h2>
-</div>
+    <h3>Request</h3>
+    <div class="table-responsive">
+        <table class="table table-hover table-sm">
+            <tr data-th-each="header : ${request_headers}">
+                <td data-th-text="${header['key']}">Header Name</td>
+                <td data-th-text="${header['value']}">Header Value</td>
+            </tr>
+        </table>
+    </div>
+    <h3>Response</h3>
+    <div class="table-responsive">
+        <table class="table table-hover table-sm">
+            <tr data-th-each="header : ${response_headers}">
+                <td data-th-text="${header['key']}">Response Header Name</td>
+                <td data-th-text="${header['value']}">Response Header Value</td>
+            </tr>
+        </table>
+    </div>
+</section>

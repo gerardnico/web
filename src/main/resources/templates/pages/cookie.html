@@ -1,72 +1,128 @@
 <!DOCTYPE HTML SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <body>
 
 <div id="cookie">
 
-    <h2>Introduction</h2>
-    <p>This page demos the Cookie scope
+    <script type="text/javascript">
+    let webby = {};
+    webby.getCookie = function(name) {
+        return document.cookie
+        .split(";")
+        .filter( (item) => item.trim().startsWith(name))[0]
+        .split("=")[1];
+    }
 
 
-    <h2>Visits Cookie and the Cookie domain attribute</h2>
 
 
-    <p>The
-        <mark>visits</mark>
-        cookie is a counter.
-    </p>
-    <p>If the cookie is present in the browser, the browser send it to the server.
-        The server increments it by one or create if it does not get it from the browser and sends it back in the
-        response to the browser.
-    </p>
 
-    <p>It permits to tell you that you have loaded/visited this page:</p>
 
-    <script language="JavaScript">
+
+    </script>
+
+    <section id="introduction">
+        <h2>Introduction</h2>
+        <p>This page demos the Cookie scope</p>
+
+        <p>This scope determines when a cookie is send back to the sever with a request. It's composed of </p>
+        <ul>
+            <li>the domain: <span data-th-text="${domain}">domain</span></li>
+            <li>the path: <span data-th-text="${path}">path</span></li>
+        </ul>
+
+    </section>
+
+    <section id="visits">
+        <h2>Demo: `visits` Cookie</h2>
+
+        <p>The
+            <mark>visits</mark>
+            cookie is just a counter. Every time that they are send to the server, the server is incrementing them
+            and sending them back in the response to the browser.
+        </p>
+        <p>It permits then to tell the number of http request sends to the server.</p>
+
+
+        <section id="visitsPageScoped">
+            <h3>The visits cookie, scoped to this page</h3>
+
+            <p>The
+                <mark>visits</mark>
+                has as scope element
+            </p>
+            <ul>
+                <li><span data-th-text="${domain}">domain</span>. The domain can be changed by the server but will not
+                    be
+                    accepted by the browser for security reason.
+                </li>
+                <li><span data-th-text="${path}">path</span></li>
+            </ul>
+            <p>This scope means that the cookie
+                <mark>visits</mark>
+                with this scope will be send every time, this page is loaded (ie refreshed)
+            </p>
+            <p>Try it your self, refresh the page and see how the counter is incrementing by one.</p>
+
+            <p>You have loaded / visited this page:</p>
+            <script language="JavaScript">
     $(document).ready(function () {
-        $('#totalTimes').html($.cookie('visits'));
+        $('#totalTimes').html(webby.getCookie("visits"));
     });
 
-    </script>
-    <p style="font-size:28px;text-align:center"><span id="totalTimes">0</span> time(s)!</p>
-
-    <p>You have visited this domain:</p>
-
-    <script language="JavaScript">
-    $(document).ready(function () {
-        $('#domainVisits').html($.cookie('visitsDomain'));
-    });
-
-    </script>
-    <p style="font-size:28px;text-align:center"><span id="domainVisits">0</span> time(s)!</p>
-
-    <p>This cookie is set only for the domain
-        <mark data-th-text="${host}">host</mark>
-        that you visits and see in the browser address bar.
-    </p>
-    <p>Therefore if you open this page from another domain the
-        <mark>visits</mark>
-        counter is not incremented.
-    </p>
-    <p>Try it, click on one of the below links, refresh the page and you should see that the
-        <mark>visits</mark>
-        value of the cookie are independent
-    </p>
-    <div data-th-replace="templates/fragments/cross_page.html :: #cross_page">Cross Page</div>
-
-    <br>
-    <br>
 
 
 
+
+            </script>
+            <p style="font-size:28px;text-align:center"><span id="totalTimes">0</span> time(s)!</p>
+        </section>
+        <section id="visitsDomainScoped">
+
+
+            <h3>The visits cookie, scoped to the domain</h3>
+            <p>A cookie with the same name can exists for a page if they don't share the same scope</p>
+            <p>We have created the same `visits` cookie but with the scope</p>
+            <ul>
+                <li>
+                    <mark data-th-text="${domain}">domain</mark>
+                    .
+                </li>
+                <li>
+                    <mark>/</mark>
+                </li>
+            </ul>
+            <p>This cookie is then send for all pages / resources in the domain.</p>
+            <p style="font-size:28px;text-align:center"><span data-th-text="${visitsCookieDomainScoped}">0</span>  time(s)!</p>
+
+        </section>
+        <section id="visitsOtherDomain">
+            <h3>Same cookie, other domain</h3>
+
+            <p>This cookie is send only for the domain
+                <mark data-th-text="${domain}">domain</mark>
+                that you visits and see in the browser address bar.
+            </p>
+            <p>Therefore if you open this page from another domain the
+                <mark>visits</mark>
+                counter is not incremented.
+            </p>
+
+            <p>Try it, click on one of the below links, refresh the page and you should see that the
+                <mark>visits</mark>
+                value of the cookie are independent
+            </p>
+            <div data-th-replace="templates/fragments/cross_page.html :: #cross_page">Cross Page</div>
+        </section>
+
+    </section>
     <p>Form</p>
     <form>
         <input type="submit" name="action" value="Set Cookie To Bar"/>
         <input type="submit" name="action" value="Set Cookie To Foo"/>
         <input type="submit" name="action" value="Set Cookie To Top"/>
     </form>
-
-    <div data-th-replace="templates/fragments/http_headers.html">Http Headers list</div>
 
 
 </div>
