@@ -1,19 +1,10 @@
 package com.gerardnico.web;
 
 
-import io.vertx.core.MultiMap;
 import io.vertx.core.Vertx;
-import io.vertx.core.http.impl.Http1xServerRequest;
-import io.vertx.core.http.impl.Http1xServerResponse;
-import io.vertx.core.http.impl.ServerCookie;
-import io.vertx.core.http.impl.headers.HeadersMultiMap;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.templ.thymeleaf.ThymeleafTemplateEngine;
-
-import java.lang.reflect.Field;
-import java.util.*;
-import java.util.stream.Collectors;
 
 public class Template {
 
@@ -48,38 +39,12 @@ public class Template {
         /**
          * Headers
          */
-        List<Map.Entry<String, String>> headers = ctx.request().headers().entries()
-                .stream()
-                .sorted(Map.Entry.comparingByKey())
-                .collect(Collectors.toList());
-
-        data.put("request_headers", headers);
-
+        data.put("request_headers", ContextWrapper.getRequestHeaders(ctx));
 
         /**
          * Headers response
          */
-        MultiMap headersResponse = new HeadersMultiMap();
-        headersResponse.addAll(ctx.response().headers());
-        /**
-         * Add the cookies
-         */
-        try {
-            Http1xServerResponse response = ((Http1xServerResponse) ctx.response());
-            Field cookiesField = response.getClass().getDeclaredField("cookies");
-            cookiesField.setAccessible(true);
-            Object cookiesFieldValue = cookiesField.get(response);
-            if (cookiesFieldValue!=null) {
-                @SuppressWarnings("unchecked")
-                Map<String, ServerCookie> cookies = (Map<String, ServerCookie>) cookiesFieldValue;//IllegalAccessException
-                cookies.values().forEach(e -> {
-                    headersResponse.add("set-cookie", e.encode());
-                });
-            }
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-        data.put("response_headers", headersResponse);
+        data.put("response_headers", ContextWrapper.getResponseHeaders(ctx));
 
         render(data, ctx);
 

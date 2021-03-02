@@ -1,6 +1,15 @@
 package com.gerardnico.web;
 
+import io.vertx.core.http.impl.Http1xServerResponse;
+import io.vertx.core.http.impl.ServerCookie;
+import io.vertx.core.http.impl.headers.HeadersMultiMap;
 import io.vertx.ext.web.RoutingContext;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ContextWrapper {
 
@@ -28,14 +37,71 @@ public class ContextWrapper {
     }
 
     public static String getDomain(RoutingContext ctx) {
-        String domain =  getHost(ctx);
-        if (domain.contains(":")){
-            domain = domain.substring(0,domain.indexOf(":"));
+        String domain = getHost(ctx);
+        if (domain.contains(":")) {
+            domain = domain.substring(0, domain.indexOf(":"));
         }
         return domain;
     }
 
     public static String getPath(RoutingContext ctx) {
         return ctx.request().path();
+    }
+
+    /**
+     * Headers can be present twice with the same name
+     *
+     * @param ctx
+     * @return
+     */
+    public static HeadersMultiMap getRequestHeadersMultiMap(RoutingContext ctx) {
+        HeadersMultiMap headersResponse = new HeadersMultiMap();
+        headersResponse.addAll(ctx.request().headers());
+        return headersResponse;
+
+    }
+
+    public static HeadersMultiMap getResponseHeadersAsMultiMap(RoutingContext ctx) {
+        HeadersMultiMap headersResponse = new HeadersMultiMap();
+        headersResponse.addAll(ctx.response().headers());
+        /**
+         * Add the cookies
+         */
+        try {
+            Http1xServerResponse response = ((Http1xServerResponse) ctx.response());
+            Field cookiesField = response.getClass().getDeclaredField("cookies");
+            cookiesField.setAccessible(true);
+            Object cookiesFieldValue = cookiesField.get(response);
+            if (cookiesFieldValue != null) {
+                @SuppressWarnings("unchecked")
+                Map<String, ServerCookie> cookies = (Map<String, ServerCookie>) cookiesFieldValue;//IllegalAccessException
+                cookies.values().forEach(e -> {
+                    headersResponse.add("set-cookie", e.encode());
+                });
+            }
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        return headersResponse;
+    }
+
+    public static List<Map.Entry<String,String>> getResponseHeaders(RoutingContext ctx) {
+        return MultiMapToList(getResponseHeadersAsMultiMap(ctx));
+    }
+
+    /**
+     *
+     * @param multimap
+     * @return a sorted list
+     */
+    private static List<Map.Entry<String,String>> MultiMapToList(HeadersMultiMap multimap) {
+        return multimap.entries()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .collect(Collectors.toList());
+    }
+
+    public static List<Map.Entry<String,String>> getRequestHeaders(RoutingContext ctx) {
+        return MultiMapToList(getRequestHeadersMultiMap(ctx));
     }
 }

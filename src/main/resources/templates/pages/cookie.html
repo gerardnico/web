@@ -20,6 +20,24 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </script>
 
     <section id="introduction">
@@ -28,8 +46,12 @@
 
         <p>This scope determines when a cookie is send back to the sever with a request. It's composed of </p>
         <ul>
-            <li>the <mark>domain</mark>: <span data-th-text="${domain}">domain</span></li>
-            <li>the <mark>path</mark>: <span data-th-text="${path}">path</span></li>
+            <li>the
+                <mark>domain</mark>
+                : <span data-th-text="${domain}">domain</span></li>
+            <li>the
+                <mark>path</mark>
+                : <span data-th-text="${path}">path</span></li>
         </ul>
 
     </section>
@@ -53,9 +75,13 @@
                 has as scope element
             </p>
             <ul>
-                <li><mark data-th-text="${domain}">domain</mark>.
+                <li>
+                    <mark data-th-text="${domain}">domain</mark>
+                    .
                 </li>
-                <li><mark data-th-text="${path}">path</mark></li>
+                <li>
+                    <mark data-th-text="${path}">path</mark>
+                </li>
             </ul>
             <p>The domain can be changed by the server but will not be accepted by the browser for security reason.</p>
             <p>This scope means that the cookie
@@ -65,14 +91,10 @@
             <p>Try it your self, refresh the page and see how the counter is incrementing by one.</p>
 
             <p>You have loaded / visited this page:</p>
-            <script language="JavaScript">
+            <script type="application/javascript">
     $(document).ready(function () {
         $('#totalTimes').html(webby.getCookie("visits"));
     });
-
-
-
-
 
             </script>
             <p style="font-size:28px;text-align:center"><span id="totalTimes">0</span> time(s)!</p>
@@ -81,19 +103,19 @@
 
 
             <h3>The visits cookie, scoped to the domain</h3>
-            <p>A cookie with the same name can exists for a page if they don't share the same scope</p>
-            <p>We have created the same `visits` cookie but with the scope</p>
+            <p>A cookie with the same name can exists for the same domain with another path</p>
+            <p>We have created the same `visits` cookie but with this scope:</p>
             <ul>
                 <li>
                     <mark data-th-text="${domain}">domain</mark>
-                    .
                 </li>
                 <li>
                     <mark>/</mark>
                 </li>
             </ul>
-            <p>This cookie is then send for all pages / resources in the domain.</p>
-            <p style="font-size:28px;text-align:center"><span data-th-text="${visitsCookieDomainScoped}">0</span>  time(s)!</p>
+            <p>This cookie is then send for all pages / resources in the domain</p>
+            <p>As it has the same name, it also sends twice in the headers.</p>
+            <p style="font-size:28px;text-align:center"><span data-th-text="${visits}">0</span> time(s)!</p>
 
         </section>
         <section id="visitsOtherDomain">
