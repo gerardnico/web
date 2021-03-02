@@ -28,8 +28,8 @@
 
         <p>This scope determines when a cookie is send back to the sever with a request. It's composed of </p>
         <ul>
-            <li>the domain: <span data-th-text="${domain}">domain</span></li>
-            <li>the path: <span data-th-text="${path}">path</span></li>
+            <li>the <mark>domain</mark>: <span data-th-text="${domain}">domain</span></li>
+            <li>the <mark>path</mark>: <span data-th-text="${path}">path</span></li>
         </ul>
 
     </section>
@@ -53,12 +53,11 @@
                 has as scope element
             </p>
             <ul>
-                <li><span data-th-text="${domain}">domain</span>. The domain can be changed by the server but will not
-                    be
-                    accepted by the browser for security reason.
+                <li><mark data-th-text="${domain}">domain</mark>.
                 </li>
-                <li><span data-th-text="${path}">path</span></li>
+                <li><mark data-th-text="${path}">path</mark></li>
             </ul>
+            <p>The domain can be changed by the server but will not be accepted by the browser for security reason.</p>
             <p>This scope means that the cookie
                 <mark>visits</mark>
                 with this scope will be send every time, this page is loaded (ie refreshed)

@@ -40,7 +40,7 @@ public class Server extends AbstractVerticle {
         router.route().handler(BodyHandler.create());
 
         // Cookie
-        router.route().handler(CookieVisitsDomain.create());
+        //router.route().handler(CookieVisitsDomain.create());
         router.route().handler(CookieVisits.create());
 
         // Page
